@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.BrowseImageDialog = new System.Windows.Forms.OpenFileDialog();
             this.SaveNewImageDialog = new System.Windows.Forms.SaveFileDialog();
             this.BrowseForFile_Btn = new System.Windows.Forms.Button();
@@ -124,6 +125,7 @@
             this.Controls.Add(this.Negative_Btn);
             this.Controls.Add(this.Greyscale_Btn);
             this.Controls.Add(this.BrowseForFile_Btn);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "FhotoShopp";
             ((System.ComponentModel.ISupportInitialize)(this.OriginalImage_Picturebox)).EndInit();
