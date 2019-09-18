@@ -108,7 +108,7 @@ namespace FhotoShoppApp
         {
             FileHandler fileHandler = new FileHandler();
             Cursor.Current = Cursors.WaitCursor;
-            EditedImage = imageModifier.GetBlurredImage();
+            EditedImage = imageModifier.GetLinearBlurredImage();
             Cursor.Current = Cursors.Default;
             Bitmap ResizedBlurredImage = ImageResizer.Resize(EditedImage, EditedImage_Picturebox.Width, EditedImage_Picturebox.Height);
             EditedImage_Picturebox.Image = ResizedBlurredImage;

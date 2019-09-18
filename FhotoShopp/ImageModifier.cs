@@ -14,6 +14,7 @@ namespace FhotoShopp
         {
 
         }
+
         /// <summary>
         /// Creates a new instance of the ImageModifier class
         /// </summary>
@@ -22,6 +23,7 @@ namespace FhotoShopp
         {
             this.OriginalImage = Image;
         }
+
         /// <summary>
         /// Returns the original Bitmap of the class instance
         /// </summary>
@@ -30,6 +32,7 @@ namespace FhotoShopp
         {
             return this.OriginalImage;
         }
+
         /// <summary>
         /// Sets the Original Image of the class instance
         /// </summary>
@@ -38,6 +41,7 @@ namespace FhotoShopp
         {
             this.OriginalImage = Image;
         }
+
         /// <summary>
         /// Returns the Black And White version of the original bitmap of the specified ImageModifier Bitmap object
         /// </summary>
@@ -92,12 +96,12 @@ namespace FhotoShopp
         }
 
         /// <summary>
-        /// Returns the Blurred version version of the original bitmap of the specified ImageModifier Bitmap object
+        /// Returns the Linearly blurred version of the original bitmap of the specified ImageModifier Bitmap object
         /// </summary>
         /// <returns></returns>
-        public Bitmap GetBlurredImage()
+        public Bitmap GetLinearBlurredImage()
         {
-            Bitmap BlurredImage = new Bitmap(OriginalImage);
+            Bitmap BlurredImage = new Bitmap(OriginalImage.Width, OriginalImage.Height);
 
             int BlurKernelSize = 5;
             float Avg = (float)1 / BlurKernelSize;
@@ -123,16 +127,18 @@ namespace FhotoShopp
 
                 for (int w = 0; w < OriginalImage.Width; w++)
                 {
-                    if ((w - BlurKernelSize / 2 >= 0 && w + 1 + BlurKernelSize / 2 < OriginalImage.Width))
+                    int constraintLeft = w - BlurKernelSize / 2;
+                    int constraintRight = w + 1 + BlurKernelSize / 2;
+                    if ((constraintLeft >= 0 && constraintRight < OriginalImage.Width))
                     {
-                        Color tmp_pColor = OriginalImage.GetPixel(w - BlurKernelSize / 2, h);
+                        Color tmp_pColor = OriginalImage.GetPixel(constraintLeft, h);
 
                         hSum[0] -= tmp_pColor.A;
                         hSum[1] -= tmp_pColor.R;
                         hSum[2] -= tmp_pColor.G;
                         hSum[3] -= tmp_pColor.B;
 
-                        Color tmp_nColor = OriginalImage.GetPixel(w + 1 + BlurKernelSize / 2, h);
+                        Color tmp_nColor = OriginalImage.GetPixel(constraintRight, h);
 
                         hSum[0] += tmp_nColor.A;
                         hSum[1] += tmp_nColor.R;

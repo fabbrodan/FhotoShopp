@@ -6,32 +6,42 @@ namespace Tests
 {
     public class ImageModifierTests
     {
-        private Bitmap TestImage = (Bitmap)Bitmap.FromFile(@"C:\users\admin\Pictures\red.png");
+        
         [Test]
         public void TestGreyscale()
         {
             // Arrange
-            ImageModifier mod = new ImageModifier(TestImage);
+            Bitmap TestImage = new Bitmap(10, 10);
 
-            Bitmap expectedImage = new Bitmap(mod.GetOriginalImage().Width, mod.GetOriginalImage().Height);
+            for (int x = 0; x < TestImage.Width; x++)
+            {
+                for (int y = 0; y < TestImage.Width; y++)
+                {
+                    TestImage.SetPixel(x, y, Color.FromArgb(255, 100, 200, 150));
+                }
+            }
+
+            ImageModifier imageModifier = new ImageModifier(TestImage);
+
+            Bitmap ExpectedImage = new Bitmap(10, 10);
 
             for (int x = 0; x < TestImage.Width; x++)
             {
                 for (int y = 0; y < TestImage.Height; y++)
                 {
-                    expectedImage.SetPixel(x, y, Color.FromArgb(255, 76, 76, 76));
+                    ExpectedImage.SetPixel(x, y, Color.FromArgb(255, 164, 164, 164));
                 }
             }
 
             // Act
-            Bitmap ActualImage = mod.GetGreyscaleImage();
+            Bitmap ActualImage = imageModifier.GetGreyscaleImage();
 
             // Assert
-            for (int i = 0; i < expectedImage.Width; i++)
+            for (int i = 0; i < ExpectedImage.Width; i++)
             {
-                for (int j = 0; j < expectedImage.Height; j++)
+                for (int j = 0; j < ExpectedImage.Height; j++)
                 {
-                    Assert.AreEqual(expectedImage.GetPixel(i, j), ActualImage.GetPixel(i, j));
+                    Assert.AreEqual(ExpectedImage.GetPixel(i, j), ActualImage.GetPixel(i, j));
                 }
             }
         }
@@ -40,20 +50,31 @@ namespace Tests
         public void TestNegative()
         {
             // Arrange
-            ImageModifier mod = new ImageModifier(TestImage);
 
-            Bitmap ExpectedImage = new Bitmap(mod.GetOriginalImage().Width, mod.GetOriginalImage().Height);
+            Bitmap TestImage = new Bitmap(10, 10);
+
+            for (int x = 0; x < TestImage.Width; x++)
+            {
+                for (int y = 0; y < TestImage.Height; y++)
+                {
+                    TestImage.SetPixel(x, y, Color.FromArgb(255, 155, 155, 155));
+                }
+            }
+
+            ImageModifier imageModifier = new ImageModifier(TestImage);
+
+            Bitmap ExpectedImage = new Bitmap(10, 10);
 
             for (int i = 0; i < ExpectedImage.Width; i++)
             {
                 for (int j = 0; j < ExpectedImage.Height; j++)
                 {
-                    ExpectedImage.SetPixel(i, j, Color.FromArgb(255, 0, 255, 255));
+                    ExpectedImage.SetPixel(i, j, Color.FromArgb(255, 100, 100, 100));
                 }
             }
 
             // Act
-            Bitmap ActualImage = mod.GetNegativeImage();
+            Bitmap ActualImage = imageModifier.GetNegativeImage();
 
             // Assert
             for (int x = 0; x < ActualImage.Width; x++)
@@ -68,55 +89,54 @@ namespace Tests
         [Test]
         public void TestBlur()
         {
-            // Assert
-            Bitmap OrgImg = new Bitmap(256, 256);
-            ImageModifier mod = new ImageModifier(OrgImg);
+            // Arrange
+            Bitmap TestImage = new Bitmap(9, 9);
 
-            for (int x = 0; x < OrgImg.Width; x++)
+            for (int x = 0; x < TestImage.Width; x++)
             {
-                for (int y = 0; y < OrgImg.Height; y++)
+                for (int y = 0; y < TestImage.Height; y++)
                 {
-                    if (x%2 == 0 && y%2 == 0)
+                    if (x == 4 && y == 4)
                     {
-                        OrgImg.SetPixel(x, y, Color.FromArgb(255, 255, 255, 255));
+                        TestImage.SetPixel(x, y, Color.FromArgb(255, 0, 0, 0));
                     }
                     else
                     {
-                        OrgImg.SetPixel(x, y, Color.FromArgb(255, 0, 0, 0));
+                        TestImage.SetPixel(x, y, Color.FromArgb(255, 255, 255, 255));
                     }
                 }
             }
 
-            Bitmap ExpectedImage = new Bitmap(mod.GetOriginalImage().Width, mod.GetOriginalImage().Height);
+            ImageModifier imageModifier = new ImageModifier(TestImage);
 
-            for (int i = 0; i < ExpectedImage.Width; i++)
+            Bitmap ExpectedImage = new Bitmap(9, 9);
+
+            for (int x = 0; x < ExpectedImage.Width; x++)
             {
-                for (int j = 0; j < ExpectedImage.Height; j++)
+                for (int y = 0; y < ExpectedImage.Height; y++)
                 {
-                    if (i%2 == 0 && j%2 == 0)
+                    if (y == 4)
                     {
-                        ExpectedImage.SetPixel(i, j, Color.FromArgb(255, 153, 153, 153));
+                        ExpectedImage.SetPixel(x, y, Color.FromArgb(255, 204, 204, 204));
                     }
                     else
                     {
-                        ExpectedImage.SetPixel(i, j, Color.FromArgb(255, 102, 102, 102));
+                        ExpectedImage.SetPixel(x, y, Color.FromArgb(255, 255, 255, 255));
                     }
                 }
             }
 
             // Act
-            Bitmap ActualImage = mod.GetBlurredImage();
+            Bitmap ResultImage = imageModifier.GetLinearBlurredImage();
 
             // Assert
-
-            for (int x = 0; x < OrgImg.Width; x++)
+            for (int x = 0; x < ExpectedImage.Width; x++)
             {
-                for (int y = 0; y < OrgImg.Height; y++)
+                for (int y = 0; y < ExpectedImage.Height; y++)
                 {
-                    Assert.AreEqual(ExpectedImage.GetPixel(x, y), ActualImage.GetPixel(x, y));
+                    Assert.AreEqual(ExpectedImage.GetPixel(x, y), ResultImage.GetPixel(x, y));
                 }
             }
-
         }
     }
 }

@@ -9,29 +9,10 @@ namespace FhotoShoppCLI
     {
         static void Main(string[] args)
         {
-            /*
-            Bitmap b = new Bitmap(256, 256);
-            for (int x = 0; x < b.Width; x++)
-            {
-                for (int y = 0; y < b.Height; y++)
-                {
-                    if (x%2 == 0 && y%2 == 0)
-                    {
-                        b.SetPixel(x, y, Color.FromArgb(255, 255, 255, 255));
-                    }
-                    else
-                    {
-                        b.SetPixel(x, y, Color.FromArgb(255, 0, 0, 0));
-                    }
-                }
-            }
-            b.Save(@"C:\users\admin\Desktop\bw.jpg");
-            Environment.Exit(0);
-            */
-
             string ImagePath = null;
             FileHandler fileHandler = new FileHandler();
             ImageModifier imageModifier = new ImageModifier();
+
             if (args.Length < 1)
             {
                 Console.WriteLine("There were no arguments passed to the program at startup.");
@@ -64,7 +45,7 @@ namespace FhotoShoppCLI
             imageModifier.SetOriginalImage(fileHandler.GetImageFromPath(ImagePath));
             Bitmap GreyScaleImage = imageModifier.GetGreyscaleImage();
             Bitmap NegativeImage = imageModifier.GetNegativeImage();
-            Bitmap BlurredImage = imageModifier.GetBlurredImage();
+            Bitmap BlurredImage = imageModifier.GetLinearBlurredImage();
 
             int IndexOfDot = ImagePath.IndexOf('.');
             string GreyScaleImagePath = fileHandler.NewFilePath(ImagePath, "_greyscale", IndexOfDot);
