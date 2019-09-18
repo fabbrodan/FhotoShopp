@@ -127,7 +127,7 @@ namespace Tests
             }
 
             // Act
-            Bitmap ResultImage = imageModifier.GetLinearBlurredImage();
+            Bitmap ResultImage = imageModifier.GetHorizontalLinearBlurredImage();
 
             // Assert
             for (int x = 0; x < ExpectedImage.Width; x++)

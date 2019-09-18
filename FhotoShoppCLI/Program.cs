@@ -45,7 +45,7 @@ namespace FhotoShoppCLI
             imageModifier.SetOriginalImage(fileHandler.GetImageFromPath(ImagePath));
             Bitmap GreyScaleImage = imageModifier.GetGreyscaleImage();
             Bitmap NegativeImage = imageModifier.GetNegativeImage();
-            Bitmap BlurredImage = imageModifier.GetLinearBlurredImage();
+            Bitmap BlurredImage = imageModifier.GetHorizontalLinearBlurredImage();
 
             int IndexOfDot = ImagePath.IndexOf('.');
             string GreyScaleImagePath = fileHandler.NewFilePath(ImagePath, "_greyscale", IndexOfDot);

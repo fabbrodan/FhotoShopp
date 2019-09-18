@@ -96,10 +96,10 @@ namespace FhotoShopp
         }
 
         /// <summary>
-        /// Returns the Linearly blurred version of the original bitmap of the specified ImageModifier Bitmap object
+        /// Returns the horizontally linear blurred version of the original bitmap of the specified ImageModifier Bitmap object
         /// </summary>
         /// <returns></returns>
-        public Bitmap GetLinearBlurredImage()
+        public Bitmap GetHorizontalLinearBlurredImage()
         {
             Bitmap BlurredImage = new Bitmap(OriginalImage.Width, OriginalImage.Height);
 

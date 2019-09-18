@@ -43,7 +43,6 @@ namespace FhotoShopp
         {
             StringBuilder sb = new StringBuilder(OriginalPath);
             sb.Insert(Index, AdditionalText);
-
             return sb.ToString();
         }
 
