@@ -3,26 +3,42 @@ using FhotoShopp;
 using System.IO;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System;
 
 namespace Tests
 {
     public class FileHandlerTests
     {
         [Test]
-        public void TestFileNameGeneration()
+        public void TestFileNameGenerationWithStandardPath()
         {
             // Arrange
             FileHandler fileHandler = new FileHandler();
-            string OriginalPath = @"C:\Users\admin\Pictures\tesp.jpg";
-            string AdditionalText = " hej hej ";
-            int Index = 0;
-            string Expected = @" hej hej C:\Users\admin\Pictures\tesp.jpg";
+            string originalPath = @"D:\hejhej\test.txt";
+            string additionalText = "_blurred";
+            string expectedText = @"D:\hejhej\test_blurred.txt";
 
             // Act
-            string Actual = fileHandler.NewFilePath(OriginalPath, AdditionalText, Index);
+            string actualText = fileHandler.NewFilePath(originalPath, additionalText);
 
             // Assert
-            Assert.AreEqual(Actual, Expected);
+            Assert.AreEqual(expectedText, actualText);
+        }
+
+        [Test]
+        public void TestFileNameGenerationWithDotInPath()
+        {
+            // Arrange
+            FileHandler fileHandler = new FileHandler();
+            string originalPath = @"D:\hej.hej\test.txt";
+            string additionalText = "_greyscale";
+            string expectedText = @"D:\hej.hej\test_greyscale.txt";
+
+            // Act
+            string actualText = fileHandler.NewFilePath(originalPath, additionalText);
+
+            // Assert
+            Assert.AreEqual(expectedText, actualText);
         }
 
         [Test]
@@ -30,7 +46,7 @@ namespace Tests
         {
             // Arrange
             FileHandler fileHandler = new FileHandler();
-            string path = @"C:\users\admin\Pictures\test.jpg";
+            string path = Directory.GetCurrentDirectory() + "\\TestFiles\\Test_Exists.jpg";
 
             // Act & Assert
             Assert.IsTrue(fileHandler.VerifyPath(path));
@@ -41,7 +57,7 @@ namespace Tests
         {
             // Arrange
             Bitmap img = new Bitmap(100, 100);
-            string path = @"C:\users\admin\Desktop\UnitTest.jpg";
+            string path = Directory.GetCurrentDirectory() + "\\TestFiles\\Test_Save.jpg";
 
             for (int i = 0; i < img.Width; i++)
             {

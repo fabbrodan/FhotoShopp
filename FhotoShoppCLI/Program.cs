@@ -9,7 +9,7 @@ namespace FhotoShoppCLI
     {
         static void Main(string[] args)
         {
-            string ImagePath = null;
+            string imagePath = null;
             FileHandler fileHandler = new FileHandler();
             ImageModifier imageModifier = new ImageModifier();
 
@@ -17,52 +17,47 @@ namespace FhotoShoppCLI
             {
                 Console.WriteLine("There were no arguments passed to the program at startup.");
                 Console.WriteLine("Please enter a path to an image...");
-                ImagePath = Console.ReadLine();
+                imagePath = Console.ReadLine();
             }
             else if (args.Length > 1)
             {
                 Console.WriteLine("You have specified more than one argument for the program.");
                 Console.WriteLine("Please enter a path to an image...");
-                ImagePath = Console.ReadLine();
+                imagePath = Console.ReadLine();
             }
             else
             {
-                ImagePath = args[0];
+                imagePath = args[0];
             }
 
-            while(!fileHandler.VerifyPath(ImagePath))
+            while(!fileHandler.VerifyPath(imagePath))
             {
                 Console.WriteLine("The file specified does not exist.\nPlease enter a new path...");
-                ImagePath = Console.ReadLine();
+                imagePath = Console.ReadLine();
             }
             
-            while(!fileHandler.VerifyImage(ImagePath))
+            while(!fileHandler.VerifyImage(imagePath))
             {
                 Console.WriteLine("The file specified is not an image.\nPlease enter a new path...");
-                ImagePath = Console.ReadLine();
+                imagePath = Console.ReadLine();
             }
 
-            imageModifier.SetOriginalImage(fileHandler.GetImageFromPath(ImagePath));
-            Bitmap GreyScaleImage = imageModifier.GetGreyscaleImage();
-            Bitmap NegativeImage = imageModifier.GetNegativeImage();
-            Bitmap BlurredImage = imageModifier.GetHorizontalLinearBlurredImage();
+            imageModifier.OriginalImage = fileHandler.GetImageFromPath(imagePath);
+            Bitmap greyScaleImage = imageModifier.GetGreyscaleImage();
+            Bitmap negativeImage = imageModifier.GetNegativeImage();
+            Bitmap blurredImage = imageModifier.GetHorizontalLinearBlurredImage();
 
-            int IndexOfDot = ImagePath.IndexOf('.');
-            string GreyScaleImagePath = fileHandler.NewFilePath(ImagePath, "_greyscale", IndexOfDot);
-            string NegativeImagPath = fileHandler.NewFilePath(ImagePath, "_negative", IndexOfDot);
-            string BlurredImagePath = fileHandler.NewFilePath(ImagePath, "_blurred", IndexOfDot);
+            string greyScaleImagePath = fileHandler.NewFilePath(imagePath, "_greyscale");
+            string negativeImagPath = fileHandler.NewFilePath(imagePath, "_negative");
+            string blurredImagePath = fileHandler.NewFilePath(imagePath, "_blurred");
 
-            fileHandler.SaveFile(GreyScaleImage, GreyScaleImagePath);
-            fileHandler.SaveFile(NegativeImage, NegativeImagPath);
-            fileHandler.SaveFile(BlurredImage, BlurredImagePath);
+            fileHandler.SaveFile(greyScaleImage, greyScaleImagePath);
+            fileHandler.SaveFile(negativeImage, negativeImagPath);
+            fileHandler.SaveFile(blurredImage, blurredImagePath);
 
-            Console.WriteLine("The greyscale image was saved at {0}", GreyScaleImagePath);
-            Console.WriteLine("The negative image was saved at {0}", NegativeImagPath);
-            Console.WriteLine("The blurred image was saved at {0}\n", BlurredImagePath);
-            Console.WriteLine("Enter any key to close the application...");
-
-            Console.ReadLine();
-
+            Console.WriteLine("The greyscale image was saved at {0}", greyScaleImagePath);
+            Console.WriteLine("The negative image was saved at {0}", negativeImagPath);
+            Console.WriteLine("The blurred image was saved at {0}\n", blurredImagePath);
         }
     }
 }

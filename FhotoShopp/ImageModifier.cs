@@ -5,7 +5,10 @@ namespace FhotoShopp
 {
     public class ImageModifier
     {
-        private Bitmap OriginalImage;
+        /// <summary>
+        /// The Bitmap object that is to be modified
+        /// </summary>
+        public Bitmap OriginalImage { get; set; }
 
         /// <summary>
         /// Creates a new instance of the ImageModifier class
@@ -25,46 +28,28 @@ namespace FhotoShopp
         }
 
         /// <summary>
-        /// Returns the original Bitmap of the class instance
-        /// </summary>
-        /// <returns></returns>
-        public Bitmap GetOriginalImage()
-        {
-            return this.OriginalImage;
-        }
-
-        /// <summary>
-        /// Sets the Original Image of the class instance
-        /// </summary>
-        /// <param name="Image">The Bitmap object to be modified</param>
-        public void SetOriginalImage(Bitmap Image)
-        {
-            this.OriginalImage = Image;
-        }
-
-        /// <summary>
         /// Returns the Black And White version of the original bitmap of the specified ImageModifier Bitmap object
         /// </summary>
         /// <returns>Bitmap</returns>
         public Bitmap GetGreyscaleImage()
         {
-            Bitmap BlackAndWhiteImage = new Bitmap(OriginalImage);
+            Bitmap blackAndWhiteImage = new Bitmap(OriginalImage.Width, OriginalImage.Height);
 
             for (int w = 0; w < OriginalImage.Width; w++)
             {
                 for (int h = 0; h < OriginalImage.Height; h++)
                 {
-                    Color oc = OriginalImage.GetPixel(w, h);
+                    Color originalColor = OriginalImage.GetPixel(w, h);
 
-                    int a = oc.A;
-                    int GreyScale = (int)((oc.R * 0.3) + (oc.G * 0.59) + (oc.B * 0.11));
-                    Color nc = Color.FromArgb(a, GreyScale, GreyScale, GreyScale);
+                    int a = originalColor.A;
+                    int greyScale = (int)((originalColor.R * 0.3) + (originalColor.G * 0.59) + (originalColor.B * 0.11));
+                    Color nc = Color.FromArgb(a, greyScale, greyScale, greyScale);
 
-                    BlackAndWhiteImage.SetPixel(w, h, nc);
+                    blackAndWhiteImage.SetPixel(w, h, nc);
                 }
             }
 
-            return BlackAndWhiteImage;
+            return blackAndWhiteImage;
         }
 
         /// <summary>
@@ -73,45 +58,55 @@ namespace FhotoShopp
         /// <returns></returns>
         public Bitmap GetNegativeImage()
         {
-            Bitmap InvertedImage = new Bitmap(OriginalImage);
+            Bitmap invertedImage = new Bitmap(OriginalImage.Width, OriginalImage.Height);
 
             for (int w = 0; w < OriginalImage.Width; w++)
             {
                 for (int h = 0; h < OriginalImage.Height; h++)
                 {
-                    Color OriginalColor = OriginalImage.GetPixel(w, h);
+                    Color originalColor = OriginalImage.GetPixel(w, h);
 
-                    int a = OriginalColor.A;
-                    int r = 255 - OriginalColor.R;
-                    int g = 255 - OriginalColor.G;
-                    int b = 255 - OriginalColor.B;
+                    int a = originalColor.A;
+                    int r = 255 - originalColor.R;
+                    int g = 255 - originalColor.G;
+                    int b = 255 - originalColor.B;
 
-                    Color NewColor = Color.FromArgb(a, r, g, b);
+                    Color newColor = Color.FromArgb(a, r, g, b);
 
-                    InvertedImage.SetPixel(w, h, NewColor);
+                    invertedImage.SetPixel(w, h, newColor);
                 }
             }
 
-            return InvertedImage;
+            return invertedImage;
         }
 
         /// <summary>
-        /// Returns the horizontally linear blurred version of the original bitmap of the specified ImageModifier Bitmap object
+        /// Returns the horizontally linear blurred version of the original bitmap of this ImageModifier instance
         /// </summary>
         /// <returns></returns>
         public Bitmap GetHorizontalLinearBlurredImage()
         {
-            Bitmap BlurredImage = new Bitmap(OriginalImage.Width, OriginalImage.Height);
+            Bitmap blurredImage = new Bitmap(OriginalImage.Width, OriginalImage.Height);
 
-            int BlurKernelSize = 5;
-            float Avg = (float)1 / BlurKernelSize;
+            int blurKernelSize = 0;
+
+            if (OriginalImage.Width >= 25 && OriginalImage.Height >= 25)
+            {
+                blurKernelSize = (OriginalImage.Width / 25 + OriginalImage.Height / 25) / 2;
+            }
+            else
+            {
+                blurKernelSize = 5;
+            }
+
+            float avg = (float)1 / blurKernelSize;
 
             for (int h = 0; h < OriginalImage.Height; h++)
             {
                 float[] hSum = new float[] { 0f, 0f, 0f, 0f };
                 float[] hAvg = new float[] { 0f, 0f, 0f, 0f };
 
-                for (int x = 0; x < BlurKernelSize; x++)
+                for (int x = 0; x < blurKernelSize; x++)
                 {
                     Color tmpColor = OriginalImage.GetPixel(x, h);
                     hSum[0] += tmpColor.A;
@@ -120,41 +115,49 @@ namespace FhotoShopp
                     hSum[3] += tmpColor.B;
                 }
 
-                hAvg[0] = hSum[0] * Avg;
-                hAvg[1] = hSum[1] * Avg;
-                hAvg[2] = hSum[2] * Avg;
-                hAvg[3] = hSum[3] * Avg;
+                hAvg[0] = hSum[0] * avg;
+                hAvg[1] = hSum[1] * avg;
+                hAvg[2] = hSum[2] * avg;
+                hAvg[3] = hSum[3] * avg;
 
                 for (int w = 0; w < OriginalImage.Width; w++)
                 {
-                    int constraintLeft = w - BlurKernelSize / 2;
-                    int constraintRight = w + 1 + BlurKernelSize / 2;
+                    int constraintLeft = w - blurKernelSize / 2;
+                    int constraintRight = w + 1 + blurKernelSize / 2;
                     if ((constraintLeft >= 0 && constraintRight < OriginalImage.Width))
                     {
-                        Color tmp_pColor = OriginalImage.GetPixel(constraintLeft, h);
+                        Color tmp_LeftColor = OriginalImage.GetPixel(constraintLeft, h);
 
-                        hSum[0] -= tmp_pColor.A;
-                        hSum[1] -= tmp_pColor.R;
-                        hSum[2] -= tmp_pColor.G;
-                        hSum[3] -= tmp_pColor.B;
+                        hSum[0] -= tmp_LeftColor.A;
+                        hSum[1] -= tmp_LeftColor.R;
+                        hSum[2] -= tmp_LeftColor.G;
+                        hSum[3] -= tmp_LeftColor.B;
 
-                        Color tmp_nColor = OriginalImage.GetPixel(constraintRight, h);
+                        Color tmp_RightColor = OriginalImage.GetPixel(constraintRight, h);
 
-                        hSum[0] += tmp_nColor.A;
-                        hSum[1] += tmp_nColor.R;
-                        hSum[2] += tmp_nColor.G;
-                        hSum[3] += tmp_nColor.B;
+                        hSum[0] += tmp_RightColor.A;
+                        hSum[1] += tmp_RightColor.R;
+                        hSum[2] += tmp_RightColor.G;
+                        hSum[3] += tmp_RightColor.B;
 
-                        hAvg[0] = hSum[0] * Avg;
-                        hAvg[1] = hSum[1] * Avg;
-                        hAvg[2] = hSum[2] * Avg;
-                        hAvg[3] = hSum[3] * Avg;
+                        hAvg[0] = hSum[0] * avg;
+                        hAvg[1] = hSum[1] * avg;
+                        hAvg[2] = hSum[2] * avg;
+                        hAvg[3] = hSum[3] * avg;
                     }
 
-                    BlurredImage.SetPixel(w, h, Color.FromArgb((int)hAvg[0], (int)hAvg[1], (int)hAvg[2], (int)hAvg[3]));
+                    try
+                    {
+                        blurredImage.SetPixel(w, h, Color.FromArgb((int)hAvg[0], (int)hAvg[1], (int)hAvg[2], (int)hAvg[3]));
+                    }
+                    catch (ArgumentException exc)
+                    {
+                        LogWriter.WriteToLog(exc, "Pixel at position " + w + "," + h + " were set to black");
+                        blurredImage.SetPixel(w, h, Color.FromArgb(255, 0, 0, 0));
+                    }
                 }
             }
-            return BlurredImage;
+            return blurredImage;
         }
     }
 }

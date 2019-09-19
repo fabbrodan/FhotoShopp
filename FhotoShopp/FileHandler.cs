@@ -26,7 +26,7 @@ namespace FhotoShopp
         /// Returns a Bitmap object fetched from the passed in FilePath parameter
         /// </summary>
         /// <param name="FilePath">The full path to an image on the file system</param>
-        /// <returns></returns>
+        /// <returns>Bitmap</returns>
         public Bitmap GetImageFromPath(string FilePath)
         {
             return (Bitmap)Bitmap.FromFile(FilePath);
@@ -38,11 +38,16 @@ namespace FhotoShopp
         /// <param name="OriginalPath">The path to be modified</param>
         /// <param name="AdditionalText">The additional text to be added to the path</param>
         /// <param name="Index">The 0-based index at where the additional text is to be added</param>
-        /// <returns></returns>
-        public string NewFilePath (string OriginalPath, string AdditionalText, int Index)
+        /// <returns>string</returns>
+        public string NewFilePath (string OriginalPath, string AdditionalText)
         {
+            string fileNameWithExtension = Path.GetFileName(OriginalPath);
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(OriginalPath);
+            string fileExtension = Path.GetExtension(OriginalPath);
+            string newFileName = fileNameWithoutExtension + AdditionalText + fileExtension;
             StringBuilder sb = new StringBuilder(OriginalPath);
-            sb.Insert(Index, AdditionalText);
+            sb.Replace(fileNameWithExtension, newFileName);
+
             return sb.ToString();
         }
 
@@ -50,57 +55,83 @@ namespace FhotoShopp
         /// Returns a bool indicating whether or not the passed in file path exists or not
         /// </summary>
         /// <param name="FilePath">The file path to be verified</param>
-        /// <returns></returns>
+        /// <returns>bool</returns>
         public bool VerifyPath(string FilePath)
         {
-            bool bFileExists = false;
+            bool fileExists = false;
 
             if (File.Exists(FilePath))
             {
-                bFileExists = true;
+                fileExists = true;
             }
-            return bFileExists;
+            return fileExists;
         }
 
         /// <summary>
         /// Returns a bool whether or not the specfied file from the path is an image file type or not
         /// </summary>
         /// <param name="FilePath">The file path to be verified</param>
-        /// <returns></returns>
+        /// <returns>bool</returns>
         public bool VerifyImage(string FilePath)
         {
-            bool bFileIsImage = false;
+            bool fileIsImage = false;
 
             foreach (string extension in ValidImageFileExtensions)
             {
                 if (FilePath.ToLowerInvariant().EndsWith(extension))
                 {
-                    bFileIsImage = true;
+                    fileIsImage = true;
                     break;
                 }
             }
 
-            return bFileIsImage;
+            return fileIsImage;
         }
 
         /// <summary>
-        /// Saves the Bitmap object to the specified Path
+        /// Returns the size of the file in bytes
+        /// </summary>
+        /// <param name="FilePath">The path to the file to be checked</param>
+        /// <returns>long</returns>
+        public long GetFileSizeInBytes(string FilePath)
+        {
+            var fileLengthInBytes = new FileInfo(FilePath).Length;
+            return fileLengthInBytes;
+        }
+
+        /// <summary>
+        /// Returns the size of the file in mega bytes
+        /// </summary>
+        /// <param name="FilePath">The path to the file to be checked</param>
+        /// <returns>long</returns>
+        public long GetFileSizeInMegaBytes(string FilePath)
+        {
+            var fileLengthInMegaBytes = new FileInfo(FilePath).Length / 1024 / 1024;
+            return fileLengthInMegaBytes;
+        }
+
+        /// <summary>
+        /// Tries to save the Bitmap object to the specified Path and return a bool indicating if the save was successsful or not
         /// </summary>
         /// <param name="Image">The Bitmap object to be saved</param>
         /// <param name="FilePath">The string literal of the path to be saved</param>
-        public void SaveFile(Bitmap Image, string FilePath)
+        /// <returns>bool</returns>
+        public bool SaveFile(Bitmap Image, string FilePath)
         {
             try
             {
                 Image.Save(FilePath);
+                return true;
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException exc)
             {
-                
+                LogWriter.WriteToLog(exc, null);
+                return false;
             }
-            catch (ExternalException)
+            catch (ExternalException exc)
             {
-                
+                LogWriter.WriteToLog(exc, null);
+                return false;
             }
         }
     }

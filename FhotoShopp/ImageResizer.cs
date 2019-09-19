@@ -18,12 +18,12 @@ namespace FhotoShopp
         /// <returns></returns>
         public static Bitmap Resize(Bitmap Image, int Width, int Height)
         {
-            var DestinationRectangle = new Rectangle(0, 0, Width, Height);
-            var ResizedImage = new Bitmap(Width, Height);
+            var destinationRectangle = new Rectangle(0, 0, Width, Height);
+            var resizedImage = new Bitmap(Width, Height);
 
-            ResizedImage.SetResolution(Image.HorizontalResolution, Image.VerticalResolution);
+            resizedImage.SetResolution(Image.HorizontalResolution, Image.VerticalResolution);
 
-            using (Graphics g = Graphics.FromImage(ResizedImage))
+            using (Graphics g = Graphics.FromImage(resizedImage))
             {
                 g.CompositingMode = CompositingMode.SourceCopy;
                 g.CompositingQuality = CompositingQuality.HighQuality;
@@ -34,11 +34,11 @@ namespace FhotoShopp
                 using (var wrapMode = new ImageAttributes())
                 {
                     wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    g.DrawImage(Image, DestinationRectangle, 0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel, wrapMode);
+                    g.DrawImage(Image, destinationRectangle, 0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel, wrapMode);
                 }
             }
 
-            return ResizedImage;
+            return resizedImage;
         }
     }
 }

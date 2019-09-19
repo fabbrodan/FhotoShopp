@@ -15,7 +15,8 @@ namespace FhotoShoppApp
 {
     public partial class Form1 : Form
     {
-        ImageModifier imageModifier = new ImageModifier();
+        ImageModifier _ImageModifier = new ImageModifier();
+        FileHandler _FileHandler = new FileHandler();
         private string OriginalFileName;
         private string NewFileName;
         private int IndexOfDotInFilePath;
@@ -42,11 +43,11 @@ namespace FhotoShoppApp
                     EditedImage_Picturebox.Image = null;
                 }
 
-                var fileSize = new FileInfo(BrowseImageDialog.FileName).Length;
+                var fileSize = _FileHandler.GetFileSizeInMegaBytes(BrowseImageDialog.FileName);
 
-                if (fileSize > 1000000)
+                if (fileSize > 3)
                 {
-                    DialogResult result = MessageBox.Show("The image selected is larger than 1 megabyte. Actual Image size is " + ((decimal)fileSize/1024/1024).ToString("N2") + " megabytes." +
+                    DialogResult result = MessageBox.Show("The image selected is larger than 3 megabyte. Actual Image size is " + ((decimal)fileSize).ToString("N2") + " megabytes." +
                         "\nImage processing will be gradually slower the larger the file is." +
                         "\nDo you wish to proceed anyways?", "File Size Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -64,7 +65,7 @@ namespace FhotoShoppApp
                 Bitmap OriginalImage = (Bitmap)Bitmap.FromFile(BrowseImageDialog.FileName);
                 Bitmap ResizedImage = ImageResizer.Resize(OriginalImage, OriginalImage_Picturebox.Width, OriginalImage_Picturebox.Height);
                 OriginalImage_Picturebox.Image = ResizedImage;
-                imageModifier.SetOriginalImage(OriginalImage);
+                _ImageModifier.OriginalImage = OriginalImage;
                 OriginalFileName = BrowseImageDialog.SafeFileName;
 
                 IndexOfDotInFilePath = OriginalFileName.IndexOf('.');
@@ -77,10 +78,8 @@ namespace FhotoShoppApp
 
         private void Greyscale_Btn_Click(object sender, EventArgs e)
         {
-            FileHandler fileHandler = new FileHandler();
-
             Cursor.Current = Cursors.WaitCursor;
-            EditedImage = imageModifier.GetGreyscaleImage();
+            EditedImage = _ImageModifier.GetGreyscaleImage();
             Cursor.Current = Cursors.Default;
             Bitmap ResizedGreyscaleImage = ImageResizer.Resize(EditedImage, EditedImage_Picturebox.Width, EditedImage_Picturebox.Height);
             EditedImage_Picturebox.Image = ResizedGreyscaleImage;
@@ -92,9 +91,8 @@ namespace FhotoShoppApp
 
         private void Negative_Btn_Click(object sender, EventArgs e)
         {
-            FileHandler fileHandler = new FileHandler();
             Cursor.Current = Cursors.WaitCursor;
-            EditedImage = imageModifier.GetNegativeImage();
+            EditedImage = _ImageModifier.GetNegativeImage();
             Cursor.Current = Cursors.Default;
             Bitmap ResizedNegativeImage = ImageResizer.Resize(EditedImage, EditedImage_Picturebox.Width, EditedImage_Picturebox.Height);
             EditedImage_Picturebox.Image = ResizedNegativeImage;
@@ -106,9 +104,8 @@ namespace FhotoShoppApp
 
         private void Blur_Btn_Click(object sender, EventArgs e)
         {
-            FileHandler fileHandler = new FileHandler();
             Cursor.Current = Cursors.WaitCursor;
-            EditedImage = imageModifier.GetHorizontalLinearBlurredImage();
+            EditedImage = _ImageModifier.GetHorizontalLinearBlurredImage();
             Cursor.Current = Cursors.Default;
             Bitmap ResizedBlurredImage = ImageResizer.Resize(EditedImage, EditedImage_Picturebox.Width, EditedImage_Picturebox.Height);
             EditedImage_Picturebox.Image = ResizedBlurredImage;
