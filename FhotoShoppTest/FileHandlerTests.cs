@@ -41,6 +41,11 @@ namespace Tests
             Assert.AreEqual(expectedText, actualText);
         }
 
+        /*
+         *  TO RUN THIS TEST GO TO \FHOTOSHOPPTESTS\BIN\DEBUG\NETCOREAPP2.2\ IF YOU ARE RUNNING THIS IN DEBUG MODE
+         *  OTHERWISE OPEN THE RELEASE FOLDER
+         *  AND ADD A FOLDER CALLED "TestFiles" AND IN THIS DIRECTORY ADD A FILE CALLED "Test_Exists.jpg"
+         */
         [Test]
         public void TestFileExists()
         {
@@ -52,6 +57,11 @@ namespace Tests
             Assert.IsTrue(fileHandler.VerifyPath(path));
         }
 
+        /*
+         *  TO RUN THIS TEST GO TO \FHOTOSHOPPTESTS\BIN\DEBUG\NETCOREAPP2.2\ IF YOU ARE RUNNING THIS IN DEBUG MODE
+         *  OTHERWISE OPEN THE RELEASE FOLDER
+         *  AND ADD A FOLDER CALLED "TestFiles"
+         */
         [Test]
         public void TestFileSave()
         {
@@ -84,3 +94,4 @@ namespace Tests
         }
     }
 }
+ 
