@@ -30,16 +30,35 @@ namespace FhotoShoppCLI
                 imagePath = args[0];
             }
 
-            while(!fileHandler.VerifyPath(imagePath))
+            bool validPath = fileHandler.VerifyPath(imagePath);
+            bool validFile = fileHandler.VerifyFileExtension(imagePath);
+
+            while ((!validFile) || (!validPath))
             {
-                Console.WriteLine("The file specified does not exist.\nPlease enter a new path...");
-                imagePath = Console.ReadLine();
-            }
-            
-            while(!fileHandler.VerifyImage(imagePath))
-            {
-                Console.WriteLine("The file specified is not an image.\nPlease enter a new path...");
-                imagePath = Console.ReadLine();
+                if (!validPath)
+                {
+                    Console.WriteLine("The file specified does not exist.\nPlease enter a new path...");
+                    imagePath = Console.ReadLine();
+
+                    validPath = fileHandler.VerifyPath(imagePath);
+                    validFile = fileHandler.VerifyFileExtension(imagePath);
+                }
+                else if (!validPath && validFile)
+                {
+                    Console.WriteLine("The file specified does not exist.\nPlease enter a new path...");
+                    imagePath = Console.ReadLine();
+
+                    validPath = fileHandler.VerifyPath(imagePath);
+                    validFile = fileHandler.VerifyFileExtension(imagePath);
+                }
+                else if (validPath && !validFile)
+                {
+                    Console.WriteLine("The file specified is not an image.\nPlease enter a new path...");
+                    imagePath = Console.ReadLine();
+
+                    validPath = fileHandler.VerifyPath(imagePath);
+                    validFile = fileHandler.VerifyFileExtension(imagePath);
+                }
             }
 
             imageModifier.OriginalImage = fileHandler.GetImageFromPath(imagePath);

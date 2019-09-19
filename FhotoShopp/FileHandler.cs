@@ -72,7 +72,7 @@ namespace FhotoShopp
         /// </summary>
         /// <param name="FilePath">The file path to be verified</param>
         /// <returns>bool</returns>
-        public bool VerifyImage(string FilePath)
+        public bool VerifyFileExtension(string FilePath)
         {
             bool fileIsImage = false;
 
