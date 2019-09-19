@@ -14,12 +14,7 @@
 *.userprefs
 
 # Build results
-[Dd]ebug/*.dll
-[Dd]ebug/*.pbd
-[Dd]ebug/*.json
-[Dd]ebug/*.tmp
-[Dd]ebug/*.exe
-[Dd]ebug/*.xml
+[Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
