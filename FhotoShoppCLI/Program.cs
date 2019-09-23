@@ -9,10 +9,10 @@ namespace FhotoShoppCLI
     {
         static void Main(string[] args)
         {
-            string imagePath = null;
             FileHandler fileHandler = new FileHandler();
             ImageModifier imageModifier = new ImageModifier();
 
+            string imagePath;
             if (args.Length < 1)
             {
                 Console.WriteLine("There were no arguments passed to the program at startup.");
@@ -76,7 +76,7 @@ namespace FhotoShoppCLI
 
             Console.WriteLine("The greyscale image was saved at {0}", greyScaleImagePath);
             Console.WriteLine("The negative image was saved at {0}", negativeImagPath);
-            Console.WriteLine("The blurred image was saved at {0}\n", blurredImagePath);
+            Console.WriteLine("The blurred image was saved at {0}\n", blurredImagePath);           
         }
     }
 }

@@ -12,16 +12,16 @@ namespace FhotoShopp
         /// <summary>
         /// Returns a resized bitmap object according to the specified Width and height
         /// </summary>
-        /// <param name="Image">The bitmap to be resized</param>
-        /// <param name="Width">The resized Width</param>
-        /// <param name="Height">The resized Height</param>
+        /// <param name="image">The bitmap to be resized</param>
+        /// <param name="width">The resized Width</param>
+        /// <param name="height">The resized Height</param>
         /// <returns></returns>
-        public static Bitmap Resize(Bitmap Image, int Width, int Height)
+        public static Bitmap Resize(Bitmap image, int width, int height)
         {
-            var destinationRectangle = new Rectangle(0, 0, Width, Height);
-            var resizedImage = new Bitmap(Width, Height);
+            var destinationRectangle = new Rectangle(0, 0, width, height);
+            var resizedImage = new Bitmap(width, height);
 
-            resizedImage.SetResolution(Image.HorizontalResolution, Image.VerticalResolution);
+            resizedImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
 
             using (Graphics g = Graphics.FromImage(resizedImage))
             {
@@ -34,7 +34,7 @@ namespace FhotoShopp
                 using (var wrapMode = new ImageAttributes())
                 {
                     wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    g.DrawImage(Image, destinationRectangle, 0, 0, Image.Width, Image.Height, GraphicsUnit.Pixel, wrapMode);
+                    g.DrawImage(image, destinationRectangle, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
                 }
             }
 

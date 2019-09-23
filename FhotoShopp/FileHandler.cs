@@ -10,7 +10,7 @@ namespace FhotoShopp
     public class FileHandler
     {
 
-        private List<string> ValidImageFileExtensions = new List<string>()
+        private List<string> validImageFileExtensions = new List<string>()
         {
             ".jpg", ".jpeg", ".bmp", ".gif", ".png"
         };
@@ -25,27 +25,26 @@ namespace FhotoShopp
         /// <summary>
         /// Returns a Bitmap object fetched from the passed in FilePath parameter
         /// </summary>
-        /// <param name="FilePath">The full path to an image on the file system</param>
+        /// <param name="filePath">The full path to an image on the file system</param>
         /// <returns>Bitmap</returns>
-        public Bitmap GetImageFromPath(string FilePath)
+        public Bitmap GetImageFromPath(string filePath)
         {
-            return (Bitmap)Bitmap.FromFile(FilePath);
+            return (Bitmap)Bitmap.FromFile(filePath);
         }
 
         /// <summary>
         /// Returns a new file path with the Additional Text inserted at the specified Index
         /// </summary>
-        /// <param name="OriginalPath">The path to be modified</param>
+        /// <param name="originalPath">The path to be modified</param>
         /// <param name="AdditionalText">The additional text to be added to the path</param>
-        /// <param name="Index">The 0-based index at where the additional text is to be added</param>
         /// <returns>string</returns>
-        public string NewFilePath (string OriginalPath, string AdditionalText)
+        public string NewFilePath(string originalPath, string additionalText)
         {
-            string fileNameWithExtension = Path.GetFileName(OriginalPath);
-            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(OriginalPath);
-            string fileExtension = Path.GetExtension(OriginalPath);
-            string newFileName = fileNameWithoutExtension + AdditionalText + fileExtension;
-            StringBuilder sb = new StringBuilder(OriginalPath);
+            string fileNameWithExtension = Path.GetFileName(originalPath);
+            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalPath);
+            string fileExtension = Path.GetExtension(originalPath);
+            string newFileName = fileNameWithoutExtension + additionalText + fileExtension;
+            StringBuilder sb = new StringBuilder(originalPath);
             sb.Replace(fileNameWithExtension, newFileName);
 
             return sb.ToString();
@@ -54,13 +53,13 @@ namespace FhotoShopp
         /// <summary>
         /// Returns a bool indicating whether or not the passed in file path exists or not
         /// </summary>
-        /// <param name="FilePath">The file path to be verified</param>
+        /// <param name="filePath">The file path to be verified</param>
         /// <returns>bool</returns>
-        public bool VerifyPath(string FilePath)
+        public bool VerifyPath(string filePath)
         {
             bool fileExists = false;
 
-            if (File.Exists(FilePath))
+            if (File.Exists(filePath))
             {
                 fileExists = true;
             }
@@ -70,15 +69,15 @@ namespace FhotoShopp
         /// <summary>
         /// Returns a bool whether or not the specfied file from the path is an image file type or not
         /// </summary>
-        /// <param name="FilePath">The file path to be verified</param>
+        /// <param name="filePath">The file path to be verified</param>
         /// <returns>bool</returns>
-        public bool VerifyFileExtension(string FilePath)
+        public bool VerifyFileExtension(string filePath)
         {
             bool fileIsImage = false;
 
-            foreach (string extension in ValidImageFileExtensions)
+            foreach (string extension in validImageFileExtensions)
             {
-                if (FilePath.ToLowerInvariant().EndsWith(extension))
+                if (filePath.ToLowerInvariant().EndsWith(extension))
                 {
                     fileIsImage = true;
                     break;
@@ -91,36 +90,36 @@ namespace FhotoShopp
         /// <summary>
         /// Returns the size of the file in bytes
         /// </summary>
-        /// <param name="FilePath">The path to the file to be checked</param>
+        /// <param name="filePath">The path to the file to be checked</param>
         /// <returns>long</returns>
-        public long GetFileSizeInBytes(string FilePath)
+        public long GetFileSizeInBytes(string filePath)
         {
-            var fileLengthInBytes = new FileInfo(FilePath).Length;
+            var fileLengthInBytes = new FileInfo(filePath).Length;
             return fileLengthInBytes;
         }
 
         /// <summary>
         /// Returns the size of the file in mega bytes
         /// </summary>
-        /// <param name="FilePath">The path to the file to be checked</param>
+        /// <param name="filePath">The path to the file to be checked</param>
         /// <returns>long</returns>
-        public long GetFileSizeInMegaBytes(string FilePath)
+        public long GetFileSizeInMegaBytes(string filePath)
         {
-            var fileLengthInMegaBytes = new FileInfo(FilePath).Length / 1024 / 1024;
+            var fileLengthInMegaBytes = new FileInfo(filePath).Length / 1024 / 1024;
             return fileLengthInMegaBytes;
         }
 
         /// <summary>
         /// Tries to save the Bitmap object to the specified Path and return a bool indicating if the save was successsful or not
         /// </summary>
-        /// <param name="Image">The Bitmap object to be saved</param>
-        /// <param name="FilePath">The string literal of the path to be saved</param>
+        /// <param name="image">The Bitmap object to be saved</param>
+        /// <param name="filePath">The string literal of the path to be saved</param>
         /// <returns>bool</returns>
-        public bool SaveFile(Bitmap Image, string FilePath)
+        public bool SaveFile(Bitmap image, string filePath)
         {
             try
             {
-                Image.Save(FilePath);
+                image.Save(filePath);
                 return true;
             }
             catch (ArgumentNullException exc)

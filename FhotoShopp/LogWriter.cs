@@ -12,19 +12,19 @@ namespace FhotoShopp
         /// </summary>
         public static string LogPath { get; } = Directory.GetCurrentDirectory() + "\\Log\\log.txt";
 
-        private static string LogDirectory = Directory.GetCurrentDirectory() + "\\Log";
+        private static readonly string logDirectory = Directory.GetCurrentDirectory() + "\\Log";
 
         /// <summary>
         /// Writes a new line to the log file containing time stamp and the specified message.
         /// </summary>
-        /// <param name="Message"></param>
-        public static void WriteToLog(string Message)
+        /// <param name="message"></param>
+        public static void WriteToLog(string message)
         {
             DateTime now = DateTime.Now;
 
-            if (!Directory.Exists(LogDirectory))
+            if (!Directory.Exists(logDirectory))
             {
-                Directory.CreateDirectory(LogDirectory);
+                Directory.CreateDirectory(logDirectory);
             }
 
             if (!File.Exists(LogPath))
@@ -35,7 +35,7 @@ namespace FhotoShopp
 
             using (StreamWriter writer = File.AppendText(LogPath))
             {
-                string logLine = now.ToString() + " - " + Message;
+                string logLine = now.ToString() + " - " + message;
                 writer.WriteLine(logLine);
                 writer.Flush();
             }
@@ -44,15 +44,15 @@ namespace FhotoShopp
         /// <summary>
         /// Writes a new line to the log file containing time stamp, the Exception type, stack trace and specified message.
         /// </summary>
-        /// <param name="Exception">The exception to be used for log entry</param>
-        /// <param name="Message">The message to be additionally written to the log</param>
-        public static void WriteToLog(Exception Exception, string Message)
+        /// <param name="exception">The exception to be used for log entry</param>
+        /// <param name="message">The message to be additionally written to the log</param>
+        public static void WriteToLog(Exception exception, string message)
         {
             DateTime now = DateTime.Now;
 
-            if (!Directory.Exists(LogDirectory))
+            if (!Directory.Exists(logDirectory))
             {
-                Directory.CreateDirectory(LogDirectory);
+                Directory.CreateDirectory(logDirectory);
             }
 
             if (!File.Exists(LogPath))
@@ -63,7 +63,7 @@ namespace FhotoShopp
 
             using (StreamWriter writer = File.AppendText(LogPath))
             {
-                string logLine = now.ToString() + " - " + Message + " - " + Exception.GetType().ToString() + Exception.StackTrace;
+                string logLine = now.ToString() + " - " + message + " - " + exception.GetType().ToString() + exception.StackTrace;
                 logLine.Replace("  ", " ");
                 writer.WriteLine(logLine);
                 writer.Flush();

@@ -15,12 +15,12 @@ namespace FhotoShoppApp
 {
     public partial class Form1 : Form
     {
-        ImageModifier _ImageModifier = new ImageModifier();
-        FileHandler _FileHandler = new FileHandler();
-        private string OriginalFileName;
-        private string NewFileName;
-        private int IndexOfDotInFilePath;
-        private Bitmap EditedImage;
+        private readonly ImageModifier imageModifier = new ImageModifier();
+        private readonly FileHandler fileHandler = new FileHandler();
+        private string originalFileName;
+        private string newFileName;
+        private int indexOfDotInFilePath;
+        private Bitmap editedImage;
         public Form1()
         {
             InitializeComponent();
@@ -43,7 +43,7 @@ namespace FhotoShoppApp
                     EditedImage_Picturebox.Image = null;
                 }
 
-                var fileSize = _FileHandler.GetFileSizeInMegaBytes(BrowseImageDialog.FileName);
+                var fileSize = fileHandler.GetFileSizeInMegaBytes(BrowseImageDialog.FileName);
 
                 if (fileSize > 3)
                 {
@@ -62,13 +62,13 @@ namespace FhotoShoppApp
                     }
                 }
 
-                Bitmap OriginalImage = (Bitmap)Bitmap.FromFile(BrowseImageDialog.FileName);
-                Bitmap ResizedImage = ImageResizer.Resize(OriginalImage, OriginalImage_Picturebox.Width, OriginalImage_Picturebox.Height);
-                OriginalImage_Picturebox.Image = ResizedImage;
-                _ImageModifier.OriginalImage = OriginalImage;
-                OriginalFileName = BrowseImageDialog.SafeFileName;
+                Bitmap originalImage = (Bitmap)Bitmap.FromFile(BrowseImageDialog.FileName);
+                Bitmap resizedImage = ImageResizer.Resize(originalImage, OriginalImage_Picturebox.Width, OriginalImage_Picturebox.Height);
+                OriginalImage_Picturebox.Image = resizedImage;
+                imageModifier.OriginalImage = originalImage;
+                originalFileName = BrowseImageDialog.SafeFileName;
 
-                IndexOfDotInFilePath = OriginalFileName.IndexOf('.');
+                indexOfDotInFilePath = originalFileName.IndexOf('.');
 
                 Greyscale_Btn.Enabled = true;
                 Negative_Btn.Enabled = true;
@@ -79,12 +79,12 @@ namespace FhotoShoppApp
         private void Greyscale_Btn_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            EditedImage = _ImageModifier.GetGreyscaleImage();
+            editedImage = imageModifier.GetGreyscaleImage();
             Cursor.Current = Cursors.Default;
-            Bitmap ResizedGreyscaleImage = ImageResizer.Resize(EditedImage, EditedImage_Picturebox.Width, EditedImage_Picturebox.Height);
-            EditedImage_Picturebox.Image = ResizedGreyscaleImage;
+            Bitmap resizedGreyscaleImage = ImageResizer.Resize(editedImage, EditedImage_Picturebox.Width, EditedImage_Picturebox.Height);
+            EditedImage_Picturebox.Image = resizedGreyscaleImage;
 
-            NewFileName = OriginalFileName.Insert(IndexOfDotInFilePath, "_greyscale");
+            newFileName = originalFileName.Insert(indexOfDotInFilePath, "_greyscale");
 
             Save_Btn.Enabled = true;
         }
@@ -92,12 +92,12 @@ namespace FhotoShoppApp
         private void Negative_Btn_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            EditedImage = _ImageModifier.GetNegativeImage();
+            editedImage = imageModifier.GetNegativeImage();
             Cursor.Current = Cursors.Default;
-            Bitmap ResizedNegativeImage = ImageResizer.Resize(EditedImage, EditedImage_Picturebox.Width, EditedImage_Picturebox.Height);
-            EditedImage_Picturebox.Image = ResizedNegativeImage;
+            Bitmap resizedNegativeImage = ImageResizer.Resize(editedImage, EditedImage_Picturebox.Width, EditedImage_Picturebox.Height);
+            EditedImage_Picturebox.Image = resizedNegativeImage;
 
-            NewFileName = OriginalFileName.Insert(IndexOfDotInFilePath, "_negative");
+            newFileName = originalFileName.Insert(indexOfDotInFilePath, "_negative");
 
             Save_Btn.Enabled = true;
         }
@@ -105,22 +105,22 @@ namespace FhotoShoppApp
         private void Blur_Btn_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            EditedImage = _ImageModifier.GetHorizontalLinearBlurredImage();
+            editedImage = imageModifier.GetHorizontalLinearBlurredImage();
             Cursor.Current = Cursors.Default;
-            Bitmap ResizedBlurredImage = ImageResizer.Resize(EditedImage, EditedImage_Picturebox.Width, EditedImage_Picturebox.Height);
-            EditedImage_Picturebox.Image = ResizedBlurredImage;
+            Bitmap resizedBlurredImage = ImageResizer.Resize(editedImage, EditedImage_Picturebox.Width, EditedImage_Picturebox.Height);
+            EditedImage_Picturebox.Image = resizedBlurredImage;
 
-            NewFileName = OriginalFileName.Insert(IndexOfDotInFilePath, "_blurred");
+            newFileName = originalFileName.Insert(indexOfDotInFilePath, "_blurred");
 
             Save_Btn.Enabled = true;
         }
 
         private void Save_Btn_Click(object sender, EventArgs e)
         {
-            SaveNewImageDialog.FileName = NewFileName;
+            SaveNewImageDialog.FileName = newFileName;
             if (SaveNewImageDialog.ShowDialog() == DialogResult.OK)
             {
-                EditedImage.Save(SaveNewImageDialog.FileName);
+                editedImage.Save(SaveNewImageDialog.FileName);
             }
         }
     }

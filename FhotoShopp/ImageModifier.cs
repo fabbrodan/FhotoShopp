@@ -21,10 +21,10 @@ namespace FhotoShopp
         /// <summary>
         /// Creates a new instance of the ImageModifier class
         /// </summary>
-        /// <param name="Image">THe bitmap object to be modified</param>
-        public ImageModifier(Bitmap Image)
+        /// <param name="image">THe bitmap object to be modified</param>
+        public ImageModifier(Bitmap image)
         {
-            this.OriginalImage = Image;
+            this.OriginalImage = image;
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace FhotoShopp
         {
             Bitmap blurredImage = new Bitmap(OriginalImage.Width, OriginalImage.Height);
 
-            int blurKernelSize = 0;
+            int blurKernelSize;
 
             if (OriginalImage.Width >= 25 && OriginalImage.Height >= 25)
             {
